@@ -42,7 +42,7 @@ export default async function habitats(app, options) {
         return reply.code(201).send();
     });
 
-    //ajeitar para buscar animais desse tipo de habitat
+    //ajeitar para buscar especies desse tipo de habitat
     app.get('/habitats/:id/species', async (request, reply) => {
         let id = request.params.id;
         let habitat = await habitats.findOne({_id: new app.mongo.ObjectId(id)});

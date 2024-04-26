@@ -1,5 +1,5 @@
 /** @type{import('fastify').FastifyPluginAsync<>} */
-import {checkExistence, extractUser, logMe, uniqueUser} from './functions/index.js'
+import {checkExistence, extractUser, logMe, uniqueUser, uniqueDiet, uniqueHabitat, uniqueAnimal } from './functions/index.js'
 
 export default async function onRouteHook(app, options) {
 

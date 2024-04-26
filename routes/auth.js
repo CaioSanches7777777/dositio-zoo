@@ -33,10 +33,12 @@ export default async function auth(app, options) {
         }},
         async (request, reply) => {
         let user = request.body;
-        let searchedUser = await auth.findOne({username: user.username})
+
+        /*let searchedUser = await auth.findOne({username: user.username})
         if(searchedUser.password != user.password){
             throw new ACCESS_UNAUHORIZED()
-        }
+        }*/
+        
         request.log.info(`Login for user ${user.username}`);
         //check login details
         delete user.password;

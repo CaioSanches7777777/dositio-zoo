@@ -1,6 +1,7 @@
 /** @type{import('fastify').FastifyPluginAsync<>} */
 import createError from '@fastify/error';
 import { config } from 'dotenv';
+import species from './species.js';
 export default async function animals(app, options) {
 
     const animals = app.mongo.db.collection('animals');
@@ -23,7 +24,7 @@ export default async function animals(app, options) {
                 properties: {
                     id: { type: 'integer' },
                     name: { type: 'string' },
-                    species: { type: 'integer' },
+                    species: { type: 'string' },
                     age: { type: 'integer' }
                 },
                 required: ['name', 'species', 'age']
@@ -40,12 +41,24 @@ export default async function animals(app, options) {
     });
 
 
-    app.get('/animals/:id', async (request, reply) => {
+    app.get('/animals/:id',{
+        config:{
+            requireAuthentication: true
+        }}, async (request, reply) => {
         let id = request.params.id;
         let animal = await animals.findOne({_id: new app.mongo.ObjectId(id)});
         return animal;
     });
-    
+
+    /*//tentar buscar animais pela especie
+    app.get('/animals/species/:id', async (request, reply) => {
+        let id = request.params.id;
+        let specie = await species.findOne({_id: new app.mongo.ObjectId(id)});
+        let animal = await animals.findOne({specie: new app.mongo.ObjectId(specie)});
+        return animal;
+    });
+    */
+
     app.delete('/animals/:id',{
         config:{
             requireAuthentication: true

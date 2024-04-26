@@ -1,11 +1,13 @@
 /** @type{import('fastify').FastifyPluginAsync<>} */
 
 import habitats from './habitats.js';
-import species from './species.js';
+import diets from './diets.js';
 
 export default async function species(app, options) {
 
     const species = app.mongo.db.collection('species');
+    const animals = app.mongo.db.collection('animals');
+
 
     app.get('/species', 
         {   
@@ -46,15 +48,29 @@ export default async function species(app, options) {
         return reply.code(201).send();
     });
 
-    //ajeitar para busvar dietas da espécie
-    app.get('/species/:id/diets', async (request, reply) => {
+    //ajeitar para buscar dietas da espécie
+/*    app.get('/species/:id/diets', async (request, reply) => {
         let id = request.params.id;
         let specie = await diets.findOne({_id: new app.mongo.ObjectId(id)});
         let SpecieType = specie.type;
         let speciesDiet = await species.find({diet: DietType}).toArray();
         return speciesDiet; 
     });
+*/
 
+    app.get('/species/:id/animals',{
+        config:{
+            requireAuthentication: true
+        }}, async (request, reply) => {
+        let id = request.params.id;
+        let specie = await species.findOne({_id: new app.mongo.ObjectId(id)});
+        let animalSpecie = specie.name;
+        let speciesDiet = await animals.find({species: animalSpecie}).toArray();
+        return speciesDiet; 
+    });
+
+
+/*
     //ajeitar para buscar habitats da espécie
     app.get('/species/:id/diets', async (request, reply) => {
         let id = request.params.id;
@@ -63,8 +79,11 @@ export default async function species(app, options) {
         let speciesDiet = await species.find({diet: DietType}).toArray();
         return speciesDiet; 
     });
-
-    app.get('/species/:id', async (request, reply) => {
+*/
+    app.get('/species/:id',{
+        config:{
+            requireAuthentication: true
+        }}, async (request, reply) => {
         let id = request.params.id;
         let specie = await species.findOne({_id: new app.mongo.ObjectId(id)});
         return specie;
