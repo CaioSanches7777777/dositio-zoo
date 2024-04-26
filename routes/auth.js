@@ -34,7 +34,8 @@ export default async function auth(app, options) {
         async (request, reply) => {
         let user = request.body;
 
-        /*let searchedUser = await auth.findOne({username: user.username})
+        /*  //não pode estar ativado antes de inserir o 1º usuario (impede a criação de usuarios por usuarios sem token)
+        let searchedUser = await auth.findOne({username: user.username})
         if(searchedUser.password != user.password){
             throw new ACCESS_UNAUHORIZED()
         }*/
